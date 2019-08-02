@@ -43,6 +43,6 @@ export const store = createStore(
 
 sagaMiddleware.run(rootSaga);
 
-store.subscribe(() => console.log(store.getState()));
+// store.subscribe(() => console.log(store.getState()));
 
 export const persistor = persistStore(store);
