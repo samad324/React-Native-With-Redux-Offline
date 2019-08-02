@@ -3,6 +3,9 @@ import { persistStore, persistReducer } from "redux-persist";
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import { AsyncStorage } from "react-native";
 import createSagaMiddleware from "redux-saga";
+import { createOffline } from "@redux-offline/redux-offline";
+import offlineConfig from "@redux-offline/redux-offline/lib/defaults/index";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 import rootReducer from "./rootReducer";
 import rootSaga from "./rootSaga";
@@ -16,11 +19,26 @@ const persistConfig = {
 
 const sagaMiddleware = createSagaMiddleware();
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const {
+  middleware: offlineMiddleware,
+  enhanceReducer: offlineEnhanceReducer,
+  enhanceStore: offlineEnhanceStore
+} = createOffline({
+  ...offlineConfig,
+  persist: false
+});
+
+const persistedReducer = persistReducer(
+  persistConfig,
+  offlineEnhanceReducer(rootReducer)
+);
 
 export const store = createStore(
   persistedReducer,
-  applyMiddleware(sagaMiddleware)
+  composeWithDevTools(
+    offlineEnhanceStore,
+    applyMiddleware(sagaMiddleware, offlineMiddleware)
+  )
 );
 
 sagaMiddleware.run(rootSaga);

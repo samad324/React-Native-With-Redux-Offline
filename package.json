@@ -18,12 +18,15 @@
     "android:reconnect": "$ANDROID_HOME/platform-tools/adb devices | grep '\\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} $ANDROID_HOME/platform-tools/adb -s {} reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
+    "@react-native-community/netinfo": "^2.0.10",
+    "@redux-offline/redux-offline": "^2.5.2",
     "apisauce": "^0.14.2",
     "prop-types": "^15.6.0",
     "react": "16.6.3",
     "react-native": "0.58.4",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^5.10.0",
     "redux-saga": "^1.0.2"
   },
